@@ -18,8 +18,8 @@ def agent():
 def test_config_loading_and_multi_models(tmp_path):
     custom_config = {
         "platform": "ollama",
-        "model": "mistral:latest",
-        "models": ["mistral:latest", "qwen2.5:8b", "failsafe_engine"],
+        "model": "ministral-3:3b",
+        "models": ["ministral-3:3b", "mistral:latest", "ministral-3:8b"],
         "platforms_config": {
             "ollama": {"url": "http://localhost:11434"}
         },
@@ -31,7 +31,7 @@ def test_config_loading_and_multi_models(tmp_path):
 
     custom_agent = TacticalAgent(config_path=cfg_file)
     assert custom_agent.platform == "ollama"
-    assert custom_agent.models_list == ["mistral:latest", "qwen2.5:8b", "failsafe_engine"]
+    assert custom_agent.models_list == ["ministral-3:3b", "mistral:latest", "ministral-3:8b"]
 
 
 def test_scenario_coverage_generation():

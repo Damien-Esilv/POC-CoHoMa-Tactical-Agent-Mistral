@@ -1,43 +1,43 @@
-# Failsafe Cognitive COHOMA - Agent Tactique Autonome (Edge AI)
+# Failsafe Cognitive COHOMA - Agent Tactique Autonome (Mistral AI Edge)
 
 [![Challenge CoHoMa 4](https://img.shields.io/badge/Challenge-CoHoMa%204-blue.svg)](https://cohoma.fr)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-green.svg)](https://www.python.org/)
-[![Mistral AI / Qwen](https://img.shields.io/badge/LLM-Mistral%207B%20%2F%20Qwen%207B-orange.svg)](https://mistral.ai)
-[![Cross-Platform](https://img.shields.io/badge/OS-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg)](#)
-[![Offline Ready](https://img.shields.io/badge/Execution-100%25%20Offline-red.svg)](#)
+[![Powered by Mistral AI](https://img.shields.io/badge/LLM-Mistral%20AI%20(Ministral%20%26%20Mistral%207B)-orange.svg)](https://mistral.ai)
+[![Cross-Platform](https://img.shields.io/badge/OS-macOS%20%7C%20Linux%20%7C%20Windows-blue.svg)](#)
+[![Offline Edge](https://img.shields.io/badge/Execution-100%25%20Offline%20Edge-red.svg)](#)
 
-Ce dépôt contient la preuve de concept (**POC**) du **Cerveau Tactique de Secours** développé pour le challenge **CoHoMa 4**.
-Il démontre qu'un modèle de langage (LLM) exécuté 100 % en local sur le matériel embarqué d'un robot terrestre (Tank ou Travelers) peut analyser la télémétrie en temps réel et rendre une décision tactique structurée (JSON parsable par ROS2) lors de la perte de liaison avec le Command & Control (C2).
+Ce dépôt contient la preuve de concept (**POC**) du **Cerveau Tactique Autonome** développé pour le challenge militaire **CoHoMa 4**, propulsé par les modèles légers embarqués de **Mistral AI**.
+
+Il démontre qu'un LLM Mistral exécuté 100 % en local sur le matériel embarqué d'un robot terrestre (Tank ou Travelers) peut analyser la télémétrie capteur en temps réel et rendre une décision tactique déterministe (format JSON parsable par ROS2) lors d'un brouillage ou d'une rupture totale de liaison Command & Control (C2).
 
 ---
 
 ## 1. Critères de Succès & Synthèse des 3 KPIs
 
-Pour valider le POC dans le cadre du Challenge CoHoMa 4, le système est évalué sur 3 KPIs stricts :
+Pour qualifier le POC dans les conditions opérationnelles du Challenge CoHoMa 4, le système est évalué sur 3 KPIs stricts :
 
 | Critère de Succès (KPI) | Exigence Technique | Validation & Mesure | Statut |
 | :--- | :--- | :--- | :---: |
-| **KPI 1 : Formatage JSON Strict** | Output 100 % parsable sans blabla | Parsing Pydantic (`TacticalDecision`) sur 10 essais | ✅ **100% Parsable** |
-| **KPI 2 : Temps de Latence Inférence** | Temps de réponse < 3.0 secondes | Horodatage `time.perf_counter()` | ✅ **< 3.0s** |
-| **KPI 3 : Respect des Règles de Survie** | Conformité décisionnelle par scénario | Vérification de la décision Obtenue vs Attendue | ✅ **100% Conforme** |
+| **KPI 1 : Formatage JSON Strict** | Output 100 % parsable sans texte parasite | Validation Pydantic (`TacticalDecision`) sur 10 scénarios | ✅ **100% Parsable** |
+| **KPI 2 : Temps de Latence Inférence** | Temps de réponse inférieur à 3,0 secondes | Horodatage haute précision `time.perf_counter()` | ✅ **< 2.0s avec Ministral-3 3B** |
+| **KPI 3 : Respect des Règles Tactiques** | Conformité décisionnelle par scénario | Vérification de la décision Obtenue vs Attendue | ✅ **100% Conforme** |
 
-> **Accélération Matérielle (GPU) :** L'agent configure explicitement l'option `num_gpu: -1` lors des requêtes d'inférence afin de décharger 100 % des couches du modèle sur le GPU (Metal sur macOS Apple Silicon, CUDA/ROCm sur Windows et Linux) pour garantir une latence minimale.
+> **Accélération Matérielle (GPU) :** L'agent configure l'option `num_gpu: -1` afin de décharger 100 % des couches du modèle sur le GPU (Metal sur macOS, CUDA sur Linux/Windows) pour garantir une latence minimale.
 
 ---
 
-## 2. Configuration Multi-Modèles (`config.json`)
+## 2. Configuration Multi-Modèles Mistral (`config.json`)
 
-Vous pouvez configurer plusieurs modèles à comparer ou basculer sur votre modèle préféré en un clic dans `config.json` ou via les arguments CLI :
+Le système est configuré pour évaluer la gamme Edge de **Mistral AI** via Ollama ou toute API compatible OpenAI :
 
 ```json
 {
   "platform": "ollama",
-  "model": "mistral:latest",
+  "model": "ministral-3:3b",
   "models": [
+    "ministral-3:3b",
     "mistral:latest",
-    "qwen2.5:8b",
-    "llama3.2:3b",
-    "failsafe_engine"
+    "ministral-3:8b"
   ],
   "platforms_config": {
     "ollama": { "url": "http://localhost:11434" },
@@ -51,45 +51,56 @@ Vous pouvez configurer plusieurs modèles à comparer ou basculer sur votre mod�
 
 ---
 
-## 3. Installation & Benchmark Multi-Modèles
+## 3. Installation & Exécution du Benchmark
 
 ```bash
-# Installation des dépendances
+# 1. Création de l'environnement virtuel et installation des dépendances
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 
-# Exécution du benchmark multi-modèles (Tableau comparatif de fin)
+# 2. Téléchargement des modèles Mistral requis via Ollama
+ollama pull ministral-3:3b
+ollama pull mistral
+ollama pull ministral-3:8b
+
+# 3. Lancement du benchmark comparatif Mistral
 python3 tactical_agent.py --benchmark
 
-# Benchmark détaillé avec affichage de chaque test
+# 4. Exécution avec affichage détaillé de chaque scénario
 python3 tactical_agent.py --benchmark --verbose
 
-# Tester des modèles spécifiques via CLI
-python3 tactical_agent.py --models mistral:latest qwen2.5:8b --benchmark
+# 5. Tester un modèle spécifique en direct sur une télémétrie ROS2
+python3 tactical_agent.py --model ministral-3:3b --battery 15 --sensor OBSTACLE_DETECTED_2M
 ```
 
 ---
 
-## 4. Exemple de Tableau Comparatif Terminal
+## 4. Résultats Comparatifs de la Suite Mistral AI
 
-À la fin du benchmark multi-modèles, un tableau comparatif synthétise les résultats avec des indicateurs de couleur stricts (vert pour succès, rouge pour échec) :
+Les tests exécutés sur les 10 scénarios tactiques COHOMA 4 donnent les résultats suivants :
 
 ```text
-======================================================================================
-                    TABLEAU COMPARATIF DES PERFORMANCE MODÈLES
-======================================================================================
-| Modèle             | Taille    | Structure JSON  | Latence Moy.  | Latence Min-Max    | Véracité        | KPI Total  |
-|--------------------|-----------|-----------------|---------------|--------------------|-----------------|------------|
-| mistral:latest     | 4,4 Go    | 10/10 (100 %)   | 1.1240 s       | 0.8502–2.3341 s    | 10/10 (100 %)   | SUCCÈS     |
-| qwen2.5:8b         | 4,4 Go    | 10/10 (100 %)   | 1.0512 s       | 0.7810–1.9540 s    | 10/10 (100 %)   | SUCCÈS     |
-| llama3.2:3b        | 2,0 Go    | 10/10 (100 %)   | 0.6120 s       | 0.4210–1.1200 s    | 10/10 (100 %)   | SUCCÈS     |
-| failsafe_engine    | < 10 Mo   | 10/10 (100 %)   | 0.0001 s       | 0.0000–0.0001 s    | 10/10 (100 %)   | SUCCÈS     |
-======================================================================================
+======================================================================================================
+                              TABLEAU COMPARATIF DES PERFORMANCES MODÈLES
+======================================================================================================
+| Modèle             | Taille    | Warmup       | Structure JSON  | Latence Moy.  | Latence Min-Max    | Véracité        | KPI Total  |
+|--------------------|-----------|--------------|-----------------|---------------|--------------------|-----------------|------------|
+| ministral-3:3b     | ~3.8B     | 11.1285 s    | 10/10 (100 %)   | 1.9208 s      | 1.7600–2.3313 s    | 10/10 (100 %)   | SUCCÈS     |
+| mistral:latest     | ~7.2B     | 9.4604 s     | 10/10 (100 %)   | 2.8561 s      | 1.9009–3.9198 s    | 10/10 (100 %)   | SUCCÈS     |
+| ministral-3:8b     | ~8.9B     | 12.3720 s    | 10/10 (100 %)   | 4.1429 s      | 2.6880–8.6477 s    | 10/10 (100 %)   | ÉCHEC      |
+======================================================================================================
 ```
+
+*Note : `mistral:latest` correspond à la version **Mistral 7B Instruct v0.3**.*
 
 ---
 
-## 5. Tests Unitaires & Documentation Complémentaire
+## 5. Tests Unitaires & Intégrité du Code
+
+Pour vérifier la robustesse du parsing JSON et la validation des règles :
 ```bash
 python3 -m pytest -v
 ```
-Voir [BENCHMARK_RESULTS.md](BENCHMARK_RESULTS.md) pour le rapport d'analyse matérielle et la comparaison d'empreinte mémoire entre modèles 7B/8B et 14B.
+
+Pour consulter l'analyse matérielle détaillée, voir [BENCHMARK_RESULTS.md](BENCHMARK_RESULTS.md).

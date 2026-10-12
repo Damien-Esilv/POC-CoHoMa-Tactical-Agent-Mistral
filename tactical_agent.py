@@ -99,8 +99,8 @@ class TacticalAgent:
                 print(f"[WARN] Impossible de lire {path}: {e}. Utilisation de la configuration par défaut.", file=sys.stderr)
         return {
             "platform": "ollama",
-            "model": "mistral:latest",
-            "models": ["mistral:latest", "qwen3:14b", "qwen3:8b", "qwen3:4b", "qwen3:1.7b", "failsafe_engine"],
+            "model": "ministral-3:3b",
+            "models": ["ministral-3:3b", "mistral:latest", "ministral-3:8b"],
             "platforms_config": {
                 "ollama": {"url": "http://localhost:11434"},
                 "lm_studio": {"url": "http://localhost:1234"},
@@ -663,8 +663,8 @@ def main():
     parser = argparse.ArgumentParser(description="Failsafe Cognitive COHOMA - Tactical Agent")
     parser.add_argument("--config", type=str, default="config.json", help="Chemin du fichier de configuration JSON")
     parser.add_argument("--platform", type=str, choices=["ollama", "lm_studio", "llama_cpp"], help="Plateforme LLM locale")
-    parser.add_argument("--model", type=str, help="Nom du modèle local (ex: mistral:latest, qwen2.5:8b)")
-    parser.add_argument("--models", nargs="+", help="Liste de modèles à comparer dans le benchmark (ex: --models mistral:latest qwen3:14b qwen3:8b qwen3:4b qwen3:1.7b failsafe_engine)")
+    parser.add_argument("--model", type=str, help="Nom du modèle local (ex: ministral-3:3b, mistral:latest, ministral-3:8b)")
+    parser.add_argument("--models", nargs="+", help="Liste de modèles à comparer dans le benchmark (ex: --models ministral-3:3b mistral:latest ministral-3:8b)")
     parser.add_argument("--backend-url", type=str, help="URL personnalisée de l'API LLM")
     parser.add_argument("--telemetry-file", type=str, help="Fichier JSON de télémétrie")
     parser.add_argument("--battery", type=int, default=35, help="Pourcentage de batterie (0-100)")
