@@ -104,6 +104,6 @@ def test_multi_model_benchmark_execution(agent, capsys):
     models = ["failsafe_engine"]
     run_benchmark_suite(agent, models=models, condensed=True)
     captured = capsys.readouterr().out
-    assert "TABLEAU COMPARATIF DES PERFORMANCE MODÈLES" in captured
+    assert "TABLEAU COMPARATIF DES PERFORMANCES MODÈLES" in captured
     assert "failsafe_engine" in captured
     assert "SUCCÈS" in captured or "ÉCHEC" in captured

@@ -1,8 +1,10 @@
 {
   "platform": "ollama",
-  "model": "mistral:latest",
+  "model": "ministral-3:3b",
   "models": [
     "mistral:latest",
+    "ministral-3:3b",
+    "ministral-3:8b",
     "qwen3:14b",
     "qwen3:8b",
     "qwen3:4b",

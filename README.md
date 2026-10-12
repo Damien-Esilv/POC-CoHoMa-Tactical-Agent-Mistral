@@ -21,6 +21,8 @@ Pour valider le POC dans le cadre du Challenge CoHoMa 4, le système est évalu�
 | **KPI 2 : Temps de Latence Inférence** | Temps de réponse < 3.0 secondes | Horodatage `time.perf_counter()` | ✅ **< 3.0s** |
 | **KPI 3 : Respect des Règles de Survie** | Conformité décisionnelle par scénario | Vérification de la décision Obtenue vs Attendue | ✅ **100% Conforme** |
 
+> **Accélération Matérielle (GPU) :** L'agent configure explicitement l'option `num_gpu: -1` lors des requêtes d'inférence afin de décharger 100 % des couches du modèle sur le GPU (Metal sur macOS Apple Silicon, CUDA/ROCm sur Windows et Linux) pour garantir une latence minimale.
+
 ---
 
 ## 2. Configuration Multi-Modèles (`config.json`)

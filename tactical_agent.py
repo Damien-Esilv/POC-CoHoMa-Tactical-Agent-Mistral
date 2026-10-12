@@ -193,12 +193,14 @@ class TacticalAgent:
             return "9,3 Go"
         elif "12b" in m_lower or "nemo" in m_lower:
             return "7,1 Go"
-        elif "8b" in m_lower or "7b" in m_lower or "mistral" in m_lower:
+        elif "8b" in m_lower:
+            return "6,0 Go"
+        elif "7b" in m_lower or "mistral:latest" in m_lower:
             return "4,4 Go"
         elif "4b" in m_lower:
             return "2,8 Go"
         elif "3b" in m_lower or "3.2" in m_lower:
-            return "2,0 Go"
+            return "3,0 Go"
         elif "1.7b" in m_lower or "1b" in m_lower:
             return "1,1 Go"
         return "Inconnue"
@@ -230,6 +232,9 @@ class TacticalAgent:
                 ],
                 "stream": False,
                 "format": "json",
+                "options": {
+                    "num_gpu": -1,  # Force le déchargement de toutes les couches sur le GPU (Metal sur Mac, CUDA/ROCm sur Windows/Linux)
+                },
             }
             try:
                 resp = requests.post(chat_url, json=payload, timeout=self.timeout_sec)
